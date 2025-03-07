@@ -82,37 +82,31 @@ public class Exercises {
         note: your implementation should be case-insensitive, e.g. Aba -> is palindrome
      */
     public List<String> findPalindromes(String string) {
-        List<String> list= new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        String regex = "\\b[a-zA-Z]{3,}\\b";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(string);
 
-        String[] words = string.split(" ");
-        String regex1 = "^(.)(.?)\\1$";
-        String regex2 = "(.)(.)(.?)\\2\\1$";
-        String regex3 = "(.)(.)(.)(.?)\\3\\2\\1$";
-        Pattern pattern1 = Pattern.compile(regex1);
-        Pattern pattern2 = Pattern.compile(regex2);
-        Pattern pattern3 = Pattern.compile(regex3);
-
-        Matcher matcher;
-        for (String word : words) {
-            matcher = pattern1.matcher(word);
-            if (matcher.matches()) {
+        while (matcher.find()) {
+            String word = matcher.group();
+            if (isPalindrome(word)) {
                 list.add(word);
             }
         }
-        for (String word : words) {
-            matcher = pattern2.matcher(word);
-            if (matcher.matches()) {
-                list.add(word);
-            }
-        }
-        for (String word : words) {
-            matcher = pattern3.matcher(word);
-            if (matcher.matches()) {
-                list.add(word);
-            }
-        }
-
         return list;
+    }
+
+    private boolean isPalindrome(String word) {
+        String lower = word.toLowerCase();
+        int left = 0, right = lower.length() - 1;
+        while (left < right) {
+            if (lower.charAt(left) != lower.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
     public static void main(String[] args) {
