@@ -1,7 +1,11 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Collection;
+
 
 public class Exercises {
 
@@ -9,7 +13,7 @@ public class Exercises {
         complete the method below, so it will validate an email address
      */
     public boolean validateEmail(String email) {
-        String regex = ""; // todo
+        String regex = "^[^.][\\S]+[^.]@+[^_]+[\\S]\\.(com|org|co\\.uk|)$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
 
@@ -20,26 +24,56 @@ public class Exercises {
         this method should find a date in string
         note that it should be in british or american format
         if there's no match for a date, return null
+     hello my name is reyhane today is 2025/3/6
      */
     public String findDate(String string) {
-        // todo
+
+        String regex1 = "\\b(\\d{4})[-/](0[1-9]|1[0-2])[-/](0[1-9]|1[0-9]|2[0-9]|3[0-1])\\b";//yyyy/mm/dd
+        String regex2 =  "\\b(0[1-9]|1[0-9]|2[0-9]|3[0-1])[-/](0[1-9]|1[0-2])[-/](\\d{4})\\b";//dd/mm/yyyy
+        Pattern pattern1 = Pattern.compile(regex1);
+        Matcher matcher1 = pattern1.matcher(string);
+        if (matcher1.find()) {
+            return matcher1.group();
+        }
+        Pattern pattern2 = Pattern.compile(regex2);
+        Matcher matcher2 = pattern2.matcher(string);
+        if (matcher2.find()) {
+            return matcher2.group();
+        }
         return null;
     }
+
 
     /*
         given a string, implement the method to detect all valid passwords
         then, it should return the count of them
 
         a valid password has the following properties:
-        - at least 8 characters
-        - has to include at least one uppercase letter, and at least a lowercase
-        - at least one number and at least a special char "!@#$%^&*"
-        - has no white-space in it
+        -✅ at least 8 characters
+        -✅has to include at least one uppercase letter, and at least a lowercase
+        -✅at least one number and at least a special char "!@#$%^&*"  ^ !
+        -✅has no white-space in it
      */
-    public int findValidPasswords(String string) {
-        // todo
-        return -1;
+    public static int findValidPasswords(String string) {
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[\\S]{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher;
+
+        String[] words = string.split("\\s+");
+
+        int validCount = 0;
+
+        for (String word : words) {
+            matcher = pattern.matcher(word);
+            if (matcher.matches()) {
+                validCount++;
+
+            }
+        }
+
+        return validCount;
     }
+
 
     /*
         you should return a list of *words* which are palindromic
@@ -48,12 +82,41 @@ public class Exercises {
         note: your implementation should be case-insensitive, e.g. Aba -> is palindrome
      */
     public List<String> findPalindromes(String string) {
-        List<String> list = new ArrayList<>();
-        // todo
+        List<String> list= new ArrayList<>();
+
+        String[] words = string.split(" ");
+        String regex1 = "^(.)(.?)\\1$";
+        String regex2 = "(.)(.)(.?)\\2\\1$";
+        String regex3 = "(.)(.)(.)(.?)\\3\\2\\1$";
+        Pattern pattern1 = Pattern.compile(regex1);
+        Pattern pattern2 = Pattern.compile(regex2);
+        Pattern pattern3 = Pattern.compile(regex3);
+
+        Matcher matcher;
+        for (String word : words) {
+            matcher = pattern1.matcher(word);
+            if (matcher.matches()) {
+                list.add(word);
+            }
+        }
+        for (String word : words) {
+            matcher = pattern2.matcher(word);
+            if (matcher.matches()) {
+                list.add(word);
+            }
+        }
+        for (String word : words) {
+            matcher = pattern3.matcher(word);
+            if (matcher.matches()) {
+                list.add(word);
+            }
+        }
+
         return list;
     }
 
     public static void main(String[] args) {
         // you can test your code here
     }
+
 }
